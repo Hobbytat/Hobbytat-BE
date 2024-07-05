@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -17,7 +16,7 @@ public class GetArticlesResponseDto {
     private List<SimpleArticleResponseDto> data;
     private int size;
 
-    public static GetArticlesResponseDto toEntity(List<Article>articleList){
+    public static GetArticlesResponseDto toDto(List<Article>articleList){
         List<SimpleArticleResponseDto> collect = articleList.stream().map(SimpleArticleResponseDto::toDto)
                 .toList();
         return GetArticlesResponseDto.builder()

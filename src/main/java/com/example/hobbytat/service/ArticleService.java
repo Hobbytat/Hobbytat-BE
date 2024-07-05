@@ -1,7 +1,6 @@
 package com.example.hobbytat.service;
 
 import com.example.hobbytat.domain.Article;
-import com.example.hobbytat.domain.Board;
 import com.example.hobbytat.repository.ArticleRepository;
 import com.example.hobbytat.repository.BoardRepository;
 import com.example.hobbytat.repository.MemberRepository;
@@ -11,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +33,7 @@ public class ArticleService {
     }
 
     @Transactional
-    public List<Article>getArticleById(Long boardId){
+    public List<Article> getArticleByBoardId(Long boardId){
 
         List<Article> articleList = articleRepository.findAll();
         List<Article> newArticalList=new ArrayList<>();
@@ -47,6 +45,10 @@ public class ArticleService {
 
         return newArticalList;
 
+    }
 
+    @Transactional
+    public Article getArticleById(Long articleId){
+        return articleRepository.findById(articleId).get();
     }
 }
