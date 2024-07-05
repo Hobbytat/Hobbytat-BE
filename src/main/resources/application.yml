@@ -18,6 +18,9 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
+jwt:
+  secret: b7e29d7bc4c8704077549d755d01139de165e4bde39bbb16275c773250823125
+
 logging:
   org.hibernate.SQL: debug
   #org.hibernate.type: trace

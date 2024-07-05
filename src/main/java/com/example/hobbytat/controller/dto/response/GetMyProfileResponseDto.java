@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 @AllArgsConstructor
-public class PutProfileResponseDto {
+public class GetMyProfileResponseDto {
     private boolean isSuccess;
     private int status;
     private Long memberId;
@@ -21,9 +21,10 @@ public class PutProfileResponseDto {
     private String profileImg;
     private HobbyType hobbyType;
     private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 
-    public static PutProfileResponseDto toDto(Member member) {
-        return PutProfileResponseDto.builder()
+    public static GetMyProfileResponseDto toDto(Member member) {
+        return GetMyProfileResponseDto.builder()
                 .isSuccess(true)
                 .status(200)
                 .memberId(member.getId())
@@ -33,6 +34,7 @@ public class PutProfileResponseDto {
                 .profileImg(member.getProfileImg())
                 .hobbyType(member.getHobbyType())
                 .createdAt(member.getCreatedAt())
+                .modifiedAt(member.getModifiedAt())
                 .build();
     }
 }
