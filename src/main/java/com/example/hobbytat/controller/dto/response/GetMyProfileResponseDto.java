@@ -21,6 +21,7 @@ public class GetMyProfileResponseDto {
     private String nickname;
     private String profileImg;
     private HobbyType hobbyType;
+    private String hobbyDescription;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -58,6 +59,7 @@ public class GetMyProfileResponseDto {
                 .nickname(member.getNickname())
                 .profileImg(member.getProfileImg())
                 .hobbyType(member.getHobbyType())
+                .hobbyDescription(member.getHobbyType().getDescription())
                 .createdAt(member.getCreatedAt())
                 .modifiedAt(member.getModifiedAt())
                 .build();
