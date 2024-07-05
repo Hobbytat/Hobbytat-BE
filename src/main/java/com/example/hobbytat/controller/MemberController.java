@@ -72,7 +72,14 @@ public class MemberController {
     @GetMapping("/profile")
     public GetMyProfileResponseDto getMyProfile(@AuthenticationPrincipal UserAdaptor userAdaptor) {
         // 내 프로필 정보
-        return GetMyProfileResponseDto.toDto(userAdaptor.getMember());
+        Member member = userAdaptor.getMember();
+
+        GetMyProfileResponseDto dto = GetMyProfileResponseDto.toDto(member);
+        dto.setWriteArticles(memberService.getWriteArticles(member));
+        dto.setReplyArticles(memberService.getReplyArticles(member));
+        dto.setLikeArticles(memberService.getLikeArticles(member));
+
+        return dto;
     }
 
     @PutMapping("/profile")
