@@ -1,5 +1,6 @@
 package com.example.hobbytat.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +20,7 @@ public class Article extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
+    @JsonIgnore
     private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
