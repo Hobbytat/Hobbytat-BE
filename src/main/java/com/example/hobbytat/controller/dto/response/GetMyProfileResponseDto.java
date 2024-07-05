@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
@@ -22,6 +23,30 @@ public class GetMyProfileResponseDto {
     private HobbyType hobbyType;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+
+    private List<SimpleArticleRankResponseDto> writeArticles;
+    private int writeArticleSize;
+
+    private List<SimpleArticleRankResponseDto> replyArticles;
+    private int replyArticleSize;
+
+    private List<SimpleArticleRankResponseDto> likeArticles;
+    private int likeArticleSize;
+
+    public void setWriteArticles(List<SimpleArticleRankResponseDto> writeArticles) {
+        this.writeArticles = writeArticles;
+        writeArticleSize = writeArticles.size();
+    }
+
+    public void setReplyArticles(List<SimpleArticleRankResponseDto> replyArticles) {
+        this.replyArticles = replyArticles;
+        replyArticleSize = replyArticles.size();
+    }
+
+    public void setLikeArticles(List<SimpleArticleRankResponseDto> likeArticles) {
+        this.likeArticles = likeArticles;
+        likeArticleSize = likeArticles.size();
+    }
 
     public static GetMyProfileResponseDto toDto(Member member) {
         return GetMyProfileResponseDto.builder()

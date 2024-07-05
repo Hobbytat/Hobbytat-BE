@@ -3,6 +3,8 @@ package com.example.hobbytat.service;
 import com.example.hobbytat.controller.dto.request.PutProfileRequestDto;
 import com.example.hobbytat.controller.dto.response.PostSignUpResponseDto;
 import com.example.hobbytat.controller.dto.response.PutProfileResponseDto;
+import com.example.hobbytat.controller.dto.response.SimpleArticleRankResponseDto;
+import com.example.hobbytat.domain.Article;
 import com.example.hobbytat.domain.HobbyType;
 import com.example.hobbytat.domain.Member;
 import com.example.hobbytat.exception.NoSuchEntityException;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -150,5 +153,32 @@ public class MemberService {
         );
 
         return PutProfileResponseDto.toDto(member);
+    }
+
+    public List<SimpleArticleRankResponseDto> getWriteArticles(Member member) {
+        List<Article> articles = member.getArticles();
+        return articles.stream()
+                .map(SimpleArticleRankResponseDto::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<SimpleArticleRankResponseDto> getReplyArticles(Member member) {
+        List<Article> articles = member.getReplies().stream()
+                .map(r -> r.getArticle())
+                .collect(Collectors.toList());
+
+        return articles.stream()
+                .map(SimpleArticleRankResponseDto::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<SimpleArticleRankResponseDto> getLikeArticles(Member member) {
+        List<Article> articles = member.getArticleLikes().stream()
+                .map(al -> al.getArticle())
+                .collect(Collectors.toList());
+
+        return articles.stream()
+                .map(SimpleArticleRankResponseDto::toDto)
+                .collect(Collectors.toList());
     }
 }
