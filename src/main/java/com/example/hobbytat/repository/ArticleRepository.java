@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
-    List<Article> findTop5ByViewCount();
+    List<Article> findTop5ByOrderByViewCountDesc();
 }

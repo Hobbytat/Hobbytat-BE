@@ -49,7 +49,7 @@ public class RankingService {
     }
 
     public List<SimpleArticleRankResponseDto> getArticleRankings() {
-        List<Article> articles = articleRepository.findTop5ByViewCount();
+        List<Article> articles = articleRepository.findTop5ByOrderByViewCountDesc();
 
         return articles.stream()
                 .map(SimpleArticleRankResponseDto::toDto)
