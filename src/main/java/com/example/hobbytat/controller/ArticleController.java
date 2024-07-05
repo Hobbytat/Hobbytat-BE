@@ -2,6 +2,7 @@ package com.example.hobbytat.controller;
 
 import com.example.hobbytat.controller.dto.request.PostArticleRequestDto;
 import com.example.hobbytat.controller.dto.response.DeleteArticleResponseDto;
+import com.example.hobbytat.controller.dto.response.GetArticlesResponseDto;
 import com.example.hobbytat.controller.dto.response.PostArticleResponseDto;
 import com.example.hobbytat.domain.Article;
 import com.example.hobbytat.domain.Board;
@@ -9,6 +10,8 @@ import com.example.hobbytat.service.ArticleService;
 import com.example.hobbytat.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,5 +40,13 @@ public class ArticleController {
         }
         else
             throw new RuntimeException();
+    }
+
+    //TODO 기본으로 몇개 가져오지?
+    @GetMapping("/{boardId}/articles")
+    public GetArticlesResponseDto getArticleById(@PathVariable("boardId")Long boardId,
+                                                 @RequestParam(value = "article_id", defaultValue = "10")Long articleId){
+        List<Article> article = articleService.getArticleById(boardId);
+        return GetArticlesResponseDto.toEntity(article);
     }
 }
