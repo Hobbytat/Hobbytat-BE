@@ -21,7 +21,7 @@ public class Board extends BaseEntity{
 
     private String img; // Image URL
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Article> articles;
 
     public void addArticle(Article article) {

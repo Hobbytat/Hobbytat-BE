@@ -29,4 +29,9 @@ public class Reply extends BaseEntity {
         this.member = member;
         member.addReply(this);
     }
+
+    public void confirmArticle(Article article) {
+        this.article = article;
+        article.addReply(this);
+    }
 }
