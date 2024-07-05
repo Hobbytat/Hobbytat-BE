@@ -1,6 +1,7 @@
 package com.example.hobbytat.controller;
 
 import com.example.hobbytat.controller.dto.request.PostArticleRequestDto;
+import com.example.hobbytat.controller.dto.response.DeleteArticleResponseDto;
 import com.example.hobbytat.controller.dto.response.PostArticleResponseDto;
 import com.example.hobbytat.domain.Article;
 import com.example.hobbytat.domain.Board;
@@ -24,5 +25,17 @@ public class ArticleController {
         Article article = postArticleRequestDto.toEntity(board);
         Article save = articleService.save(article);
         return PostArticleResponseDto.toDto(save);
+    }
+
+    @DeleteMapping("{boardId}/articles/{articleId}")
+    public DeleteArticleResponseDto deleteArticle(@PathVariable("boardId")Long boardId, @PathVariable("articleId")Long articleId){
+        if(articleService.deleteById(articleId)){
+            return DeleteArticleResponseDto.builder()
+                    .isSuccess(true)
+                    .status(200)
+                    .build();
+        }
+        else
+            throw new RuntimeException();
     }
 }
