@@ -8,11 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 @RequestMapping("/boards")
 public class BoardController {
 
@@ -20,7 +21,8 @@ public class BoardController {
 
     @GetMapping()
     public GetBoardsResponseDto getBoard(){
-        return GetBoardsResponseDto.toDto(boardService.getBoards());
+        GetBoardsResponseDto dto = GetBoardsResponseDto.toDto(boardService.getBoards());
+        return dto;
     }
 
 }
