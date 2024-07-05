@@ -1,29 +1,25 @@
 package com.example.hobbytat.service;
 
 import com.example.hobbytat.domain.*;
-import com.example.hobbytat.model.QuestionRequest;
-import com.example.hobbytat.model.QuestionResult;
+import com.example.hobbytat.controller.dto.request.QuestionRequestDto;
+import com.example.hobbytat.controller.dto.response.QuestionResultResponseDto;
+import com.example.hobbytat.exception.NoSuchEntityException;
 import com.example.hobbytat.repository.BalanceGameMemberRepository;
 import com.example.hobbytat.repository.BalanceGameRepository;
 import com.example.hobbytat.repository.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.Random;
 
 @Service
+@RequiredArgsConstructor
 public class BalanceGameService {
-
-    @Autowired
-    private BalanceGameRepository balanceGameRepository;
-
-    @Autowired
-    private BalanceGameMemberRepository balanceGameMemberRepository;
-
-    @Autowired
-    private MemberRepository memberRepository;
+    private final BalanceGameRepository balanceGameRepository;
+    private final BalanceGameMemberRepository balanceGameMemberRepository;
+    private final MemberRepository memberRepository;
 
     public BalanceGame saveBalanceGame(String title, String firstContent, String secondContent) {
         BalanceGame balanceGame = BalanceGame.builder()
@@ -35,28 +31,44 @@ public class BalanceGameService {
         return balanceGameRepository.save(balanceGame);
     }
 
-    public Optional<BalanceGame> getBalanceGameById(Long id) {
-        return balanceGameRepository.findById(id);
+    public BalanceGame getBalanceGameById(Long id) {
+        return balanceGameRepository.findById(id)
+                .orElseThrow(() -> new NoSuchEntityException("해당하는 게임이 없습니다."));
     }
 
-    public boolean setAnswer(QuestionRequest request) {
+    public BalanceGame getRandomBalanceGame(Long memberId) {
+        List<BalanceGame> balanceGames = balanceGameRepository.findAll();
+        List<BalanceGame> notInvolvedGames = new ArrayList<>();
+        for (BalanceGame balanceGame : balanceGames) {
+            List<BalanceGameMember> balanceGameMembers = balanceGame.getBalanceGameMembers();
+            boolean flag = false;
+            for (BalanceGameMember balanceGameMember : balanceGameMembers) {
+                if (balanceGameMember.getMember().getId().equals(memberId)) {
+                    flag = true;
+                }
+            }
+            if (!flag) {
+                notInvolvedGames.add(balanceGame);
+            }
+        }
+
+        Random random = new Random();
+        int randomIndex = random.nextInt(notInvolvedGames.size());
+
+        if (notInvolvedGames.isEmpty())
+            throw new NoSuchEntityException("참여하지 않은 게임이 없습니다.");
+
+        return notInvolvedGames.get(randomIndex);
+    }
+
+    public BalanceGameMember setAnswer(QuestionRequestDto request, Long questionId, Member member) {
 
         BalanceGameChoice balanceGameChoice = BalanceGameChoice.valueOf(request.getChoice());
 
-        // Member를 찾아서 가져오기
-        Member member = memberRepository.findById(request.getMemberId())
-                .orElseThrow(() -> new NoSuchElementException("해당하는 멤버가 없습니다."));
-        if(member == null){
-            return false;
-        }
 
         // BalanceGame을 찾아서 가져오기
-        Optional<BalanceGame> findBalanceGame = balanceGameRepository.findById(request.getQuestionId());
+        BalanceGame balanceGame = getBalanceGameById(questionId);
 
-        BalanceGame balanceGame = findBalanceGame.get();
-        if(balanceGame == null){
-            return false;
-        }
         // BalanceGameMember 생성
         BalanceGameMember balanceGameMember = BalanceGameMember.builder()
                 .member(member)
@@ -65,13 +77,12 @@ public class BalanceGameService {
         balanceGameMember.confirmBalanceGame(balanceGame);
 
         // BalanceGameMember 저장
-        balanceGameMemberRepository.save(balanceGameMember);
-        return true;
+        return balanceGameMemberRepository.save(balanceGameMember);
     }
 
-    public QuestionResult getQuestionResult(Long balanceGameId) {
-        Optional<BalanceGame> findGame = balanceGameRepository.findById(balanceGameId);
-        BalanceGame game = findGame.get();
+    public QuestionResultResponseDto getQuestionResult(Long balanceGameId) {
+        BalanceGame game = balanceGameRepository.findById(balanceGameId)
+                .orElseThrow(() -> new NoSuchEntityException("해당하는 게임이 없습니다."));
 
 
         long first_val = balanceGameMemberRepository.countByBalanceGameIdAndBalanceGameChoice(balanceGameId, BalanceGameChoice.FIRST);
@@ -83,11 +94,18 @@ public class BalanceGameService {
             throw new IllegalArgumentException("No participants in the balance game.");
         }
 
-        Integer first_ratio = (int) ((double) first_val / total * 100);
-        Integer second_ratio = (int) ((double) second_val / total * 100);
+        Integer firstRatio = (int) ((double) first_val / total * 100);
+        Integer secondRatio = (int) ((double) second_val / total * 100);
 
 
-        return new QuestionResult(true, 200, game.getFirstContent(), (Integer) first_ratio, game.getSecondContent(), second_ratio);
+        return QuestionResultResponseDto.builder()
+                .isSuccess(true)
+                .status(200)
+                .firstContent(game.getFirstContent())
+                .firstPercent(firstRatio)
+                .secondContent(game.getSecondContent())
+                .secondPercent(secondRatio)
+                .build();
     }
 
 
