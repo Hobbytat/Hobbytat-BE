@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 public class GetBoardsResponseDto {
-    private boolean isSuccess;
+    private Boolean isSuccess;
     private int status;
     private List<SimpleBoardResponseDto> data;
     private int size;

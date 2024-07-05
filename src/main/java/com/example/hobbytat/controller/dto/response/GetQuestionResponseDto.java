@@ -8,7 +8,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class GetQuestionResponseDto {
-    private boolean isSuccess;
+    private Boolean isSuccess;
     private int status;
     private Long questionId;
     private String title;

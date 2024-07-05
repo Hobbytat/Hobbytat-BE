@@ -10,7 +10,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class GetArticlesRankingResponseDto {
-    private boolean isSuccess;
+    private Boolean isSuccess;
     private int status;
     private List<SimpleArticleRankResponseDto> data;
     private int size;

@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class QuestionResultResponseDto {
 
-    private boolean isSuccess;
+    private Boolean isSuccess;
     private int status;
     private String firstContent;
     private Integer firstPercent;

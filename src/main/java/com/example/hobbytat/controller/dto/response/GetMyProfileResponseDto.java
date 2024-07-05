@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class GetMyProfileResponseDto {
-    private boolean isSuccess;
+    private Boolean isSuccess;
     private int status;
     private Long memberId;
     private String username;

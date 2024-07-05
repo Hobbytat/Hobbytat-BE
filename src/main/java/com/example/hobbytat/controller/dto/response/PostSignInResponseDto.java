@@ -8,7 +8,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class PostSignInResponseDto {
-    private boolean isSuccess;
+    private Boolean isSuccess;
     private int status;
     private String accessToken;
 }

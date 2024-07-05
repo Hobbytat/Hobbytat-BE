@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class GetArticlesResponseDto {
-    private boolean isSuccess;
+    private Boolean isSuccess;
     private int status;
     private List<SimpleArticleResponseDto> data;
     private int size;

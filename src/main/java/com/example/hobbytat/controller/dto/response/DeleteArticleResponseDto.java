@@ -8,7 +8,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class DeleteArticleResponseDto {
-    private boolean isSuccess;
+    private Boolean isSuccess;
     private int status;
 }
 
