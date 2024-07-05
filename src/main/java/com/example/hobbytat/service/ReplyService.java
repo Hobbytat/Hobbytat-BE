@@ -5,6 +5,7 @@ import com.example.hobbytat.controller.dto.response.PostReplyResponseDto;
 import com.example.hobbytat.domain.Article;
 import com.example.hobbytat.domain.Member;
 import com.example.hobbytat.domain.Reply;
+import com.example.hobbytat.exception.NoSuchEntityException;
 import com.example.hobbytat.repository.ArticleRepository;
 import com.example.hobbytat.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class ReplyService {
     private final ReplyRepository replyRepository;
     private final ArticleRepository articleRepository;
 
+    @Transactional
     public PostReplyResponseDto postReply(Member member, String content, Long articleId) {
         Article article = findArticleByArticleId(articleId);
         Reply reply = Reply.builder().content(content).build();
@@ -38,8 +40,11 @@ public class ReplyService {
                 .orElseThrow(() -> new NoSuchElementException("해당 게시글이 존재하지 않습니다."));
     }
 
+    @Transactional
     public DeleteReplyResponseDto deleteReply(Long replyId) {
-        replyRepository.deleteById(replyId);
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new NoSuchEntityException("해당 댓글이 존재하지 않습니다."));
+        replyRepository.delete(reply);
 
         return DeleteReplyResponseDto.builder()
                 .status(200)
