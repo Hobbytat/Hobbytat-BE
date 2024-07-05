@@ -43,7 +43,7 @@ public class RankingService {
                     .build();
             typeRankResponseDtoList.add(typeRankResponseDto);
         }
-        typeRankResponseDtoList.sort(Comparator.comparingInt(SimpleTypeRankResponseDto::getPercent));
+        typeRankResponseDtoList.sort(Comparator.comparingInt(SimpleTypeRankResponseDto::getPercent).reversed());
 
         for (int i = 1; i < typeRankResponseDtoList.size() + 1; i++) {
             typeRankResponseDtoList.get(i-1).setRank(i);

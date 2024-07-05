@@ -16,11 +16,13 @@ public class SignUpRequestDto {
     private HobbyType hobbyType;
 
     public Member toEntity() {
+        String entityImg = (profileImg == null) ? hobbyType.getUrl() : profileImg;
+
         return Member.builder()
                 .username(username)
                 .password(password)
                 .nickname(nickname)
-                .profileImg(profileImg)
+                .profileImg(entityImg)
                 .hobbyType(hobbyType)
                 .role(Role.MEMBER)
                 .build();
