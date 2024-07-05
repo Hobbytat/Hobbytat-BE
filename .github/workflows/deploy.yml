@@ -10,10 +10,12 @@ name: Java CD with Gradle
 on:
   issue_comment:
     types: [ created, edited ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   deploy:
-    if: github.event.issue.pull_request && contains(github.event.comment.body, '/쿠타버스') && contains(github.event.comment.body, '배포')
+    #if: github.event.issue.pull_request && contains(github.event.comment.body, '/하비텟') && contains(github.event.comment.body, '배포')
     runs-on: ubuntu-latest
     permissions:
       write-all
@@ -27,14 +29,18 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-
-      # Setup Redis
-      - name: Setup Redis
-        uses: shogo82148/actions-setup-redis@v1.30.1
+      - uses: mirromutth/mysql-action@v1.1
         with:
-          redis-version: 6.2.0
-          redis-port: 6379
-          auto-start: true
+          host port: 3306
+          container port: 3306 # Optional, default value is 3306. The port of container
+          character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
+          collation server: 'utf8_general_ci' # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
+          mysql version: '8.0' # Optional, default value is "latest". The version of the MySQL
+          #mysql root password: 11111111 # Required if "mysql user" is empty, default is empty. The root superuser password
+          mysql user: 'developer' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
+          mysql password: ${{ secrets.DatabasePassword }}
+          mysql database: 'hobbytat'
+
 
         # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
         # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
