@@ -30,6 +30,8 @@ public class ReplyService {
         reply.confirmMember(member);
         reply.confirmArticle(article);
 
+        article.addReplyCount();
+
         replyRepository.save(reply);
 
         return PostReplyResponseDto.toDto(reply);

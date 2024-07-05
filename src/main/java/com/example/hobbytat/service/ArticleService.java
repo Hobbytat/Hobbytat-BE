@@ -1,6 +1,7 @@
 package com.example.hobbytat.service;
 
 import com.example.hobbytat.domain.Article;
+import com.example.hobbytat.exception.NoSuchEntityException;
 import com.example.hobbytat.repository.ArticleRepository;
 import com.example.hobbytat.repository.BoardRepository;
 import com.example.hobbytat.repository.MemberRepository;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +51,10 @@ public class ArticleService {
 
     @Transactional
     public Article getArticleById(Long articleId){
-        return articleRepository.findById(articleId).get();
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new NoSuchEntityException("해당 게시글이 없습니다."));
+        article.addViewCount();
+
+        return article;
     }
 }

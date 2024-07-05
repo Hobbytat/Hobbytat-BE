@@ -52,11 +52,19 @@ public class Article extends BaseEntity {
         member.addArticle(this);
     }
 
+    public void addViewCount() {
+        this.viewCount += 1;
+    }
+
     public void addReply(Reply reply) {
         replies.add(reply);
     }
 
     public void addLikes(ArticleLike articleLike) {
         articleLikes.add(articleLike);
+    }
+
+    public void addReplyCount() {
+        this.replyCount += 1;
     }
 }
