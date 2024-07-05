@@ -59,4 +59,14 @@ public class Member extends BaseEntity {
     public void addReply(Reply reply) {
         replies.add(reply);
     }
+
+    public void changeProfile(
+            String username, String password, String nickname, String profileImg, HobbyType hobbyType
+    ) {
+        this.username = username;
+        this.password = password;
+        this.nickname = nickname;
+        this.profileImg = profileImg;
+        this.hobbyType = hobbyType;
+    }
 }

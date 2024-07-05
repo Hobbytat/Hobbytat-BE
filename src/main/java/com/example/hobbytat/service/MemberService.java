@@ -1,6 +1,8 @@
 package com.example.hobbytat.service;
 
+import com.example.hobbytat.controller.dto.request.PutProfileRequestDto;
 import com.example.hobbytat.controller.dto.response.PostSignUpResponseDto;
+import com.example.hobbytat.controller.dto.response.PutProfileResponseDto;
 import com.example.hobbytat.domain.HobbyType;
 import com.example.hobbytat.domain.Member;
 import com.example.hobbytat.exception.NoSuchEntityException;
@@ -135,5 +137,18 @@ public class MemberService {
             count += (var ? 1 : 0);
         }
         return count;
+    }
+
+    @Transactional
+    public PutProfileResponseDto changeMyProfile(Member member, PutProfileRequestDto putProfileRequestDto) {
+        member.changeProfile(
+                putProfileRequestDto.getUsername(),
+                putProfileRequestDto.getPassword(),
+                putProfileRequestDto.getNickname(),
+                putProfileRequestDto.getProfileImg(),
+                putProfileRequestDto.getHobbyType()
+        );
+
+        return PutProfileResponseDto.toDto(member);
     }
 }

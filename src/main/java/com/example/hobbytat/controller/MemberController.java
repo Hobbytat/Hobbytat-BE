@@ -75,6 +75,14 @@ public class MemberController {
         return GetMyProfileResponseDto.toDto(userAdaptor.getMember());
     }
 
+    @PutMapping("/profile")
+    public PutProfileResponseDto changeMyProfile(
+            @AuthenticationPrincipal UserAdaptor userAdaptor,
+            @RequestBody PutProfileRequestDto putProfileRequestDto
+    ) {
+        return memberService.changeMyProfile(userAdaptor.getMember(), putProfileRequestDto);
+    }
+
     @GetMapping("/profile/{memberId}")
     public GetProfileResponseDto getProfile(@PathVariable Long memberId) {
         // 내 프로필 정보
