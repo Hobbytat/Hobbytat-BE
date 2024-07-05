@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class GetArticleByIdResponseDto {
-    private boolean isSuccess;
+    private Boolean isSuccess;
     private int status;
     private Long articleId;
     private Long boardId;
@@ -24,7 +24,7 @@ public class GetArticleByIdResponseDto {
     private int viewCount;
     private int replyCount;
     private List<SimpleReplyResponseDto> replies;
-    private boolean isMemberLike; // 좋아요 여부
+    private Boolean isMemberLike; // 좋아요 여부
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 

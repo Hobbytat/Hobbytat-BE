@@ -9,7 +9,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class GetHobbyTypeResponseDto {
-    private boolean isSuccess;
+    private Boolean isSuccess;
     private int status;
     private HobbyType hobbyType;
 }

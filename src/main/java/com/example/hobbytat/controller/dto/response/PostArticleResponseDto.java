@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 public class PostArticleResponseDto {
-    private boolean isSuccess;
+    private Boolean isSuccess;
     private int status;
     private Long articleId;
     private Long boardId;

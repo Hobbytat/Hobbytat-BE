@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 public class PostSignUpResponseDto {
-    private boolean isSuccess;
+    private Boolean isSuccess;
     private int status;
     private Long memberId;
     private String username;

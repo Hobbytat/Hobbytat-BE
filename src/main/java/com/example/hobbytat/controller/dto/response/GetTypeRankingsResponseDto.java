@@ -10,7 +10,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class GetTypeRankingsResponseDto {
-    private boolean isSuccess;
+    private Boolean isSuccess;
     private int status;
     private List<SimpleTypeRankResponseDto> data;
     private int size;
