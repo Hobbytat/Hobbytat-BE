@@ -35,13 +35,13 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role; //MANAGER, MEMBER
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Article> articles;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ArticleLike> articleLikes;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Reply> replies;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {

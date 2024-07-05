@@ -36,8 +36,11 @@ public class Article extends BaseEntity {
     @Builder.Default
     private int replyCount = 0;
 
-    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ArticleLike> articleLikes;
+
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Reply> replies;
 
     public void confirmBoard(Board board) {
         this.board = board;
@@ -47,6 +50,10 @@ public class Article extends BaseEntity {
     public void confirmMember(Member member) {
         this.member = member;
         member.addArticle(this);
+    }
+
+    public void addReply(Reply reply) {
+        replies.add(reply);
     }
 
     public void addLikes(ArticleLike articleLike) {
