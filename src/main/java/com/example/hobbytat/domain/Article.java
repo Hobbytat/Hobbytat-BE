@@ -28,7 +28,11 @@ public class Article extends BaseEntity {
     private String title;
     private String content;
     private String img; // Image URL
+
+    @Builder.Default
     private int viewCount = 0;
+
+    @Builder.Default
     private int likeCount = 0;
 
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY)

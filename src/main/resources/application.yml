@@ -3,7 +3,7 @@ spring:
     name: hobbytat
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/hobbytat?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://127.0.0.1:3306/hobbytat?serverTimezone=Asia/Seoul
     username: root
     password:
   jpa:
@@ -16,6 +16,7 @@ spring:
         logging.level:
           org.hibernate.SQL: debug
         #  org.hibernate.type: trace
+        dialect: org.hibernate.dialect.MySQLDialect
 
 logging:
   level:
