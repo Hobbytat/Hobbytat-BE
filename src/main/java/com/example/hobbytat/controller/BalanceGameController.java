@@ -1,18 +1,21 @@
 package com.example.hobbytat.controller;
 
+import com.example.hobbytat.controller.dto.request.PostQuestionRequestDto;
+import com.example.hobbytat.controller.dto.response.GetQuestionResponseDto;
+import com.example.hobbytat.controller.dto.response.PostAnswerResponseDto;
 import com.example.hobbytat.domain.BalanceGame;
-import com.example.hobbytat.domain.BalanceGameChoice;
+import com.example.hobbytat.controller.dto.request.QuestionRequestDto;
+import com.example.hobbytat.controller.dto.response.QuestionResultResponseDto;
 import com.example.hobbytat.domain.BalanceGameMember;
-import com.example.hobbytat.model.QuestionRequest;
-import com.example.hobbytat.model.QuestionResult;
+import com.example.hobbytat.security.UserAdaptor;
 import com.example.hobbytat.service.BalanceGameService;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -20,90 +23,50 @@ import java.util.Optional;
 @RequestMapping("/game")
 public class BalanceGameController {
 
-    @Autowired
-    private BalanceGameService balanceGameService;
-
-    @GetMapping("/questions")
-    public QuestionResult getTotalQuestion(@RequestBody QuestionRequest questionResult){
-        Long questionId = questionResult.getQuestionId();
-        QuestionResult questionResults = balanceGameService.getQuestionResult(questionId);
-        return questionResults;
-    }
-
-
-
+    private final BalanceGameService balanceGameService;
 
     @GetMapping("/questions/{questionId}")
-    public ResponseEntity<SuccessResponse> getQuestion(@PathVariable Long questionId) {
-        Optional<BalanceGame> findGame = balanceGameService.getBalanceGameById(questionId);
+    public QuestionResultResponseDto getTotalQuestion(@PathVariable Long questionId){
+        QuestionResultResponseDto questionResultsResponseDto = balanceGameService.getQuestionResult(questionId);
 
-
-        if (findGame.isPresent()) {
-            BalanceGame balanceGame = findGame.get();
-            SuccessResponse response = new SuccessResponse(true, 200, questionId.intValue(), balanceGame.getTitle(), balanceGame.getFirstContent(), balanceGame.getSecondContent());
-            return ResponseEntity.ok(response);
-        } else {
-            throw new ResourceNotFoundException("해당하는 질문이 없습니다.");
-        }
-    }
-
-    @PostMapping("/questions/answers")
-    public ResponseEntity<PostResponse> postQuestion(@RequestBody QuestionRequest request){
-
-        if(balanceGameService.setAnswer(request)){
-            PostResponse response = new PostResponse(true, 200, request.getMemberId(), request.getQuestionId(), request.getChoice());
-            return ResponseEntity.ok(response);
-        };
-        throw new ResourceNotFoundException("해당하는 질문이 없습니다.");
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class SuccessResponse {
-        private boolean isSuccess;
-        private int status;
-        private Integer questionId;
-        private String title;
-        private String firstContent;
-        private String secondContent;
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ErrorResponse {
-        private boolean isSuccess;
-        private int status;
-        private String errorMessage;
-    }
-
-    @Data
-    @AllArgsConstructor
-    public static class AnswerResponse {
-        private boolean isSuccess;
-        private int status;
-        private Integer memberId;
-        private Integer questionId;
-        private String choice;
-    }
-
-    @Data
-    @AllArgsConstructor
-    public static class PostResponse {
-        private boolean isSuccess;
-        private int status;
-        private Long memberId;
-        private Long questionId;
-        private String choice;
+        return questionResultsResponseDto;
     }
 
 
+    @GetMapping("/questions")
+    public GetQuestionResponseDto getQuestion(@AuthenticationPrincipal UserAdaptor userAdaptor) {
+        BalanceGame findBalanceGame = balanceGameService.getRandomBalanceGame(userAdaptor.getMember().getId());
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public class ResourceNotFoundException extends RuntimeException {
-        public ResourceNotFoundException(String message) {
-            super(message);
-        }
+        return GetQuestionResponseDto.builder()
+                .isSuccess(true)
+                .status(200)
+                .questionId(findBalanceGame.getId())
+                .title(findBalanceGame.getTitle())
+                .firstContent(findBalanceGame.getFirstContent())
+                .secondContent(findBalanceGame.getSecondContent())
+                .build();
     }
+
+    @PostMapping("/questions/{questionId}/answers")
+    public PostAnswerResponseDto postAnswers(
+            @AuthenticationPrincipal UserAdaptor userAdaptor,
+            @RequestBody QuestionRequestDto request,
+            @PathVariable Long questionId){
+        BalanceGameMember balanceGameMember = balanceGameService.setAnswer(request, questionId, userAdaptor.getMember());
+
+        return PostAnswerResponseDto.builder()
+                .isSuccess(true)
+                .status(200)
+                .memberId(balanceGameMember.getMember().getId())
+                .questionId(balanceGameMember.getBalanceGame().getId())
+                .choice(balanceGameMember.getBalanceGameChoice().toString())
+                .build();
+    }
+
+    @PostMapping("/questions")
+    public boolean postQuestion(@RequestBody PostQuestionRequestDto requestDto) {
+        balanceGameService.saveBalanceGame(requestDto.getTitle(), requestDto.getFirstContent(), requestDto.getSecondContent());
+        return true;
+    }
+
 }
