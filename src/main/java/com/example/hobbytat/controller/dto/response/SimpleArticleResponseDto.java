@@ -18,6 +18,7 @@ public class SimpleArticleResponseDto {
     private String img;
     private int viewCount;
     private int likeCount;
+    private int replyCount;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 }

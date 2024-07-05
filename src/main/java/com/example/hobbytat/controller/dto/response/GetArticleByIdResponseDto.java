@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
@@ -20,6 +21,9 @@ public class GetArticleByIdResponseDto {
     private String img;
     private int likeCount;
     private int viewCount;
+    private int replyCount;
+    private List<SimpleReplyResponseDto> replies;
+    private boolean isMemberLike; // 좋아요 여부
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 }
