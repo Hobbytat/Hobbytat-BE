@@ -2,7 +2,10 @@ package com.example.hobbytat.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -18,6 +21,8 @@ public class Member extends BaseEntity {
     private Long id;
 
     private String username;
+
+    @Setter
     private String password;
 
     private String nickname;
@@ -27,14 +32,21 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private HobbyType hobbyType;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @Enumerated(EnumType.STRING)
+    private Role role; //MANAGER, MEMBER
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Article> articles;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ArticleLike> articleLikes;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Reply> replies;
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
 
     public void addArticle(Article article) {
         articles.add(article);
@@ -46,5 +58,15 @@ public class Member extends BaseEntity {
 
     public void addReply(Reply reply) {
         replies.add(reply);
+    }
+
+    public void changeProfile(
+            String username, String password, String nickname, String profileImg, HobbyType hobbyType
+    ) {
+        this.username = username;
+        this.password = password;
+        this.nickname = nickname;
+        this.profileImg = profileImg;
+        this.hobbyType = hobbyType;
     }
 }

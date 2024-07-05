@@ -1,5 +1,6 @@
 package com.example.hobbytat.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +20,7 @@ public class Article extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
+    @JsonIgnore
     private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -28,11 +30,16 @@ public class Article extends BaseEntity {
     private String title;
     private String content;
     private String img; // Image URL
+    @Builder.Default
     private int viewCount = 0;
+    @Builder.Default
     private int likeCount = 0;
 
-    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ArticleLike> articleLikes;
+
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Reply> replies;
 
     public void confirmBoard(Board board) {
         this.board = board;
@@ -42,6 +49,10 @@ public class Article extends BaseEntity {
     public void confirmMember(Member member) {
         this.member = member;
         member.addArticle(this);
+    }
+
+    public void addReply(Reply reply) {
+        replies.add(reply);
     }
 
     public void addLikes(ArticleLike articleLike) {
