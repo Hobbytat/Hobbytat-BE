@@ -20,7 +20,6 @@ public class Article extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
-    @JsonIgnore
     private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,6 +33,8 @@ public class Article extends BaseEntity {
     private int viewCount = 0;
     @Builder.Default
     private int likeCount = 0;
+    @Builder.Default
+    private int replyCount = 0;
 
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ArticleLike> articleLikes;
