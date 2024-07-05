@@ -1,11 +1,10 @@
 package com.example.hobbytat.controller.dto.response;
 
 import com.example.hobbytat.domain.HobbyType;
+import com.example.hobbytat.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -13,12 +12,19 @@ import java.time.LocalDateTime;
 public class GetProfileResponseDto {
     private boolean isSuccess;
     private int status;
-    private int memberId;
-    private String username;
-    private String password;
+    private Long memberId;
     private String nickname;
     private String profileImg;
     private HobbyType hobbyType;
-    private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
+
+    public static GetProfileResponseDto toDto(Member member) {
+        return GetProfileResponseDto.builder()
+                .isSuccess(true)
+                .status(200)
+                .memberId(member.getId())
+                .nickname(member.getNickname())
+                .profileImg(member.getProfileImg())
+                .hobbyType(member.getHobbyType())
+                .build();
+    }
 }
