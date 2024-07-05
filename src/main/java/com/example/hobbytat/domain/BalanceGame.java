@@ -22,7 +22,7 @@ public class BalanceGame extends BaseEntity {
     private String firstContent;
     private String secondContent;
 
-    @OneToMany(mappedBy = "balanceGame", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "balanceGame", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<BalanceGameMember> balanceGameMembers;
 
     public void addBalanceGameMember(BalanceGameMember balanceGameMember) {

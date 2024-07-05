@@ -1,5 +1,6 @@
 package com.example.hobbytat.repository;
 
+import com.example.hobbytat.domain.HobbyType;
 import com.example.hobbytat.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,4 +13,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     boolean existsByNickname(String nickname);
 
     boolean existsByUsername(String username);
+
+    long countByHobbyType(HobbyType type);
 }
