@@ -30,13 +30,13 @@ public class SecurityConfig {
                 // 권한 설정 시작
                 .authorizeHttpRequests(authorize ->
                         authorize
-                                .requestMatchers("/members/signin").permitAll() // 모든 사용자 허용
-                                .requestMatchers("/members/signup").permitAll() // 모든 사용자 허용
-                                .requestMatchers("/members/check-nickname").permitAll() // 모든 사용자 허용
-                                .requestMatchers("/members/check-username").permitAll() // 모든 사용자 허용
-                                .requestMatchers("/members/hobby-test").permitAll() // 모든 사용자 허용
-                                .anyRequest().authenticated() // 이외 모든 요청 인증 필요
-//                                .anyRequest().permitAll() // 이외 모든 요청 허용
+//                                .requestMatchers("/members/signin").permitAll() // 모든 사용자 허용
+//                                .requestMatchers("/members/signup").permitAll() // 모든 사용자 허용
+//                                .requestMatchers("/members/check-nickname").permitAll() // 모든 사용자 허용
+//                                .requestMatchers("/members/check-username").permitAll() // 모든 사용자 허용
+//                                .requestMatchers("/members/hobby-test").permitAll() // 모든 사용자 허용
+//                                .anyRequest().authenticated() // 이외 모든 요청 인증 필요
+                                .anyRequest().permitAll() // 이외 모든 요청 허용
                         )
                 // 구현한 필터 적용
                 .addFilterBefore(
